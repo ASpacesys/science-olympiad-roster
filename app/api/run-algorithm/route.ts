@@ -100,7 +100,7 @@ export async function POST(req: Request) {
     };
 
     const studentBlocks: Record<string, Set<number>> = {};
-    students.forEach(s => studentBlocks[s.name] = new Set());
+    students.forEach((s: Student) => studentBlocks[s.name] = new Set());
 
     // Initialize studentBlocks for prefilled entries
     for (const [event, names] of Object.entries(roster)) {
@@ -128,7 +128,7 @@ export async function POST(req: Request) {
 
     let assignedSeniors = 0;
 
-    students.forEach(s => {
+    students.forEach((s: Student) => {
       studentEventCounts[s.name] = 0;
       studentProfiles[s.name] = { bio: 0, chem: 0, build: 0, misc: 0 };
     });
@@ -139,7 +139,7 @@ export async function POST(req: Request) {
     while (!phase1Complete) {
       const options: { student: Student; event: string; score: number }[] = [];
 
-      students.forEach(s => {
+      students.forEach((s: Student) => {
         if (studentEventCounts[s.name] >= phase1Limit) return;
         if (!assignedStudents.has(s.name) && assignedStudents.size >= TEAM_SIZE) return;
         if (s.grade === 12 && !assignedStudents.has(s.name) && assignedSeniors >= MAX_SENIORS) return;
@@ -192,7 +192,7 @@ export async function POST(req: Request) {
     while (true) {
       const options: { student: Student; event: string; score: number }[] = [];
 
-      students.forEach(s => {
+      students.forEach((s: Student) => {
         if (studentEventCounts[s.name] >= MAX_EVENTS) return;
         if (!assignedStudents.has(s.name) && assignedStudents.size >= TEAM_SIZE) return;
         if (s.grade === 12 && !assignedStudents.has(s.name) && assignedSeniors >= MAX_SENIORS) return;
