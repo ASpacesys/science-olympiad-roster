@@ -1,5 +1,17 @@
 import { NextResponse } from "next/server";
 
+    interface Student {
+      name: string;
+      grade: number;
+      events: string[];
+      placements?: Record<string, number>;
+      years?: number;}
+    interface ScoreEntry {
+      student: Student;
+      event: string;
+      score: number;
+}
+
 export async function POST(req: Request) {
   try {
     const { students, prefilled } = await req.json();
@@ -38,17 +50,7 @@ export async function POST(req: Request) {
       roster[event] = prefilled?.[event]?.slice(0, eventSlots[event]) || Array(eventSlots[event]).fill("");
     });
 
-    interface Student {
-      name: string;
-      grade: number;
-      events: string[];
-      placements?: Record<string, number>;
-      years?: number;
-    interface ScoreEntry {
-      student: Student;
-      event: string;
-      score: number;
-}
+
     // Compute scores
     const scores: ScoreEntry[] = [];
     students.forEach(s => {

@@ -39,12 +39,16 @@ export async function POST(req: Request) {
   	Placements?: string;
   	Years?: number;
 
-      const students: Student[] = rows.map((row: ParsedRow) => ({
-  	name: row["Name"] || "",
-  	grade: parseInt(row["Grade"] || "0"),
-  	events: row["Events"] ? row["Events"].toString().split(",").map(e => e.trim()) : [],
-  	placements: parsePlacements(row["Placements"]?.toString()),
-  	years: parseInt(row["Years"] || row["Experience"] || "0"),
+      const students: Student[] = rows.map((row) => {
+        return {
+    	name: row["Name"] ?? "",
+    	grade: parseInt(row["Grade"]?.toString() ?? "0"),
+    	events: row["Events"] ? row["Events"].toString().split(",").map(e => e.trim()) : [],
+    	placements: parsePlacements(row["Placements"]?.toString()),
+    	years: parseInt(row["Years"]?.toString() ?? row["Experience"]?.toString() ?? "0"),
+ 	 };
+		});
+
 
       students = rows.map((row: ParsedRow) => ({
         name: row["Name"] || "",
