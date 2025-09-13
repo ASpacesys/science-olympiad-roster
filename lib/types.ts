@@ -1,9 +1,11 @@
-export type Student = {
+// lib/types.ts
+export interface Student {
   name: string;
-  grade: number; // 9–12
-  events: string[]; // events they can do
-  placements: Record<string, number>; // event -> best past placement (lower is better)
-  years: number; // years in SciOly
-};
+  grade: number;
+  events: string[];
+  placements?: Record<string, number>;
+  years?: number;
+}
+
 
 export type Roster = Record<string, string[]>; // event -> assigned names
