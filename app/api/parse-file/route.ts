@@ -32,7 +32,14 @@ export async function POST(req: Request) {
       const sheet = workbook.Sheets[sheetName];
       const rows = XLSX.utils.sheet_to_json(sheet);
 
-      students = rows.map((row: any) => ({
+      interface ParsedRow {
+  	Name: string;
+  	Grade: number;
+  	Events: string;
+  	Placements?: string;
+  	Years?: number;
+
+      students = rows.map((row: ParsedRow) => ({
         name: row["Name"] || "",
         grade: parseInt(row["Grade"] || 0),
         events: row["Events"]

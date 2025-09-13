@@ -1,6 +1,6 @@
 "use client";
 import EventRow from "./EventRow";
-import { useState } from "react";
+//import { useState } from "react";
 
 interface Event {
   name: string;

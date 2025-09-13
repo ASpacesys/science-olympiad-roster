@@ -38,9 +38,15 @@ export async function POST(req: Request) {
       roster[event] = prefilled?.[event]?.slice(0, eventSlots[event]) || Array(eventSlots[event]).fill("");
     });
 
+    interface Student {
+      name: string;
+      grade: number;
+      events: string[];
+      placements?: Record<string, number>;
+      years?: number;
     // Compute scores
-    type ScoreEntry = { student: any; event: string; score: number };
-    let scores: ScoreEntry[] = [];
+    type ScoreEntry = { student: Student; event: string; score: number };
+    const scores: ScoreEntry[] = [];
     students.forEach(s => {
       allEvents.forEach(e => {
         let score = 0;
