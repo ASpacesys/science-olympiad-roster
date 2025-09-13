@@ -1,6 +1,12 @@
 "use client";
 import EventRow from "./EventRow";
-import { Student } from "./api/parse-file/route";
+
+interface Student {
+  name: string;
+  grade: number;
+  events: string[];
+  placements: Record<string, number>;
+  years: number;
 
 interface Event {
   name: string;
