@@ -1,6 +1,6 @@
 "use client";
 import EventRow from "./EventRow";
-import { Student } from "../lib/types";
+import { Student } from "./api/parse-file/route";
 
 interface Event {
   name: string;
