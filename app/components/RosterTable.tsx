@@ -1,5 +1,6 @@
 "use client";
 import EventRow from "./EventRow";
+import { Student } from "../lib/types";
 
 interface Event {
   name: string;
