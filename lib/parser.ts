@@ -1,10 +1,18 @@
 import * as XLSX from "xlsx";
 import { Student } from "./types";
 
+interface ParsedRow {
+  Name?: string;
+  Grade?: string | number;
+  Events?: string;
+  Placements?: string;
+  Years?: string | number;
+}
+
 export function parseSpreadsheet(fileBuffer: Buffer): Student[] {
   const workbook = XLSX.read(fileBuffer, { type: "buffer" });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const rows: any[] = XLSX.utils.sheet_to_json(sheet);
+  const rows: ParsedRow[] = XLSX.utils.sheet_to_json(sheet);
 
   const students: Student[] = rows.map((row) => {
     let events: string[] = [];

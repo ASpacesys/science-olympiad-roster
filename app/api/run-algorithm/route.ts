@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     scores.sort((a,b) => b.score - a.score);
 
     // Select top 15 students while respecting senior limit
-    const selectedStudents: any[] = [];
+    const selectedStudents: Student[] = [];
     let seniorCount = 0;
     for (const entry of scores) {
       const s = entry.student;
