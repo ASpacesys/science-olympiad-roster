@@ -7,7 +7,7 @@ interface Student {
   events: string[];
   placements: Record<string, number>;
   years: number;
-
+}
 interface Event {
   name: string;
   slots: number;
