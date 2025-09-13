@@ -44,8 +44,12 @@ export async function POST(req: Request) {
       events: string[];
       placements?: Record<string, number>;
       years?: number;
+    interface ScoreEntry {
+      student: Student;
+      event: string;
+      score: number;
+}
     // Compute scores
-    type ScoreEntry = { student: Student; event: string; score: number };
     const scores: ScoreEntry[] = [];
     students.forEach(s => {
       allEvents.forEach(e => {
