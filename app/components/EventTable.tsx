@@ -1,6 +1,6 @@
 "use client";
 import EventRow from "./EventRow";
-//import { useState } from "react";
+import React, { useEffect } from "react";
 
 interface Event {
   name: string;
@@ -12,6 +12,7 @@ interface RosterTableProps {
   setRoster: (r: Record<string, string[]>) => void;
 }
 
+// Define your events
 const events: Event[] = [
   { name: "Anatomy & Physiology", slots: 2 },
   { name: "Forensics", slots: 2 },
@@ -32,20 +33,60 @@ const events: Event[] = [
   { name: "Materials Science", slots: 2 },
 ];
 
+// Map events to blocks
+const eventBlock: Record<string, number> = {
+  "Anatomy & Physiology": 1,
+  Forensics: 1,
+  "Bungee Drop": 1,
+  "Engineering CAD": 1,
+  "Disease Detectives": 2,
+  "Remote Sensing": 2,
+  "Electric Vehicle": 2,
+  Codebusters: 2,
+  Entomology: 3,
+  Astronomy: 3,
+  Helicopter: 3,
+  "Experimental Design": 3,
+  Hovercraft: 4,
+  Machines: 4,
+  "Chemistry Lab": 4,
+  "Water Quality": 5,
+  "Dynamic Planet": 5,
+  "Circuit Lab": 5,
+  "Robot Tour": 5,
+  "Designer Genes": 6,
+  "Rocks and Minerals": 6,
+  "Materials Science": 6,
+  Boomilever: 6,
+};
+
+// Light colors for each block
+const blockColors: Record<number, string> = {
+  1: "bg-red-100",
+  2: "bg-orange-100",
+  3: "bg-yellow-100",
+  4: "bg-green-100",
+  5: "bg-blue-100",
+  6: "bg-purple-100",
+};
+
 export default function RosterTable({ roster, setRoster }: RosterTableProps) {
-  // Initialize state if empty
-  if (!Object.keys(roster).length) {
-    const initRoster: Record<string, string[]> = {};
-    events.forEach((e) => {
-      initRoster[e.name] = Array(e.slots).fill("");
-    });
-    setRoster(initRoster);
-  }
+  // Initialize roster if empty
+  useEffect(() => {
+    if (Object.keys(roster).length === 0) {
+      const initRoster: Record<string, string[]> = {};
+      events.forEach((e) => {
+        initRoster[e.name] = Array(e.slots).fill("");
+      });
+      setRoster(initRoster);
+    }
+  }, [roster, setRoster]);
 
   const handleSlotChange = (eventName: string, slotIndex: number, value: string) => {
-    const updated = { ...roster };
-    updated[eventName][slotIndex] = value;
-    setRoster(updated);
+    setRoster({
+      ...roster,
+      [eventName]: roster[eventName].map((n, idx) => (idx === slotIndex ? value : n)),
+    });
   };
 
   const handleClearAll = () => {
@@ -72,12 +113,12 @@ export default function RosterTable({ roster, setRoster }: RosterTableProps) {
               event={event}
               slots={roster[event.name]}
               onSlotChange={(idx, val) => handleSlotChange(event.name, idx, val)}
+              eventColor={blockColors[eventBlock[event.name]] || "bg-white"}
             />
           ))}
         </tbody>
       </table>
 
-      {/* Clear All button */}
       <button
         onClick={handleClearAll}
         className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
