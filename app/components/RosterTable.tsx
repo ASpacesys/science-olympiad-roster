@@ -70,10 +70,9 @@ export default function RosterTable({ roster, setRoster }: RosterTableProps) {
   }
 
   const handleSlotChange = (eventName: string, slotIndex: number, value: string) => {
-    setRoster((prev) => {
-      const updated = { ...prev };
-      updated[eventName][slotIndex] = value;
-      return updated;
+    setRoster({
+      ...roster,
+      [eventName]: roster[eventName].map((n, idx) => (idx === slotIndex ? value : n)),
     });
   };
 
