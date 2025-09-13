@@ -7,6 +7,7 @@ interface Event {
 }
 
 interface RosterTableProps {
+  students: Student[];
   roster: Record<string, string[]>;
   setRoster: (r: Record<string, string[]>) => void;
 }
