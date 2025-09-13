@@ -52,16 +52,16 @@ export async function POST(req: Request) {
 
 
     // Compute scores
-    const scores: ScoreEntry[] = [];
-    students.forEach(s => {
-      allEvents.forEach(e => {
-        let score = 0;
-        if (s.events.includes(e)) score += 10;
-        if (s.placements?.[e] !== undefined) score += 10 - s.placements[e];
-        score += s.years || 0;
-        scores.push({ student: s, event: e, score });
-      });
-    });
+	const scores: ScoreEntry[] = [];
+	students.forEach((s: Student) => {
+  	allEvents.forEach((e) => {
+  	  let score = 0;
+   	 if (s.events.includes(e)) score += 10;
+  	  if (s.placements?.[e] !== undefined) score += 10 - s.placements[e];
+   	 score += s.years || 0;
+   	 scores.push({ student: s, event: e, score });
+  	});
+	});
 
     scores.sort((a,b) => b.score - a.score);
 
