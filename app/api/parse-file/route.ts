@@ -3,7 +3,26 @@ import * as XLSX from "xlsx";
 
 export const config = { api: { bodyParser: false } };
 
-function parsePlacements(str: string): Record<string, number> {
+// Top-level interface declarations
+interface ParsedRow {
+  Name: string;
+  Grade: number | string;
+  Events: string;
+  Placements?: string;
+  Years?: number | string;
+  Experience?: number | string;
+}
+
+interface Student {
+  name: string;
+  grade: number;
+  events: string[];
+  placements: Record<string, number>;
+  years: number;
+}
+
+// Helper to parse placements
+function parsePlacements(str?: string): Record<string, number> {
   if (!str) return {};
   const placements: Record<string, number> = {};
   str.split(",").forEach((entry) => {
@@ -16,7 +35,7 @@ function parsePlacements(str: string): Record<string, number> {
 export async function POST(req: Request) {
   try {
     const contentType = req.headers.get("content-type") || "";
-    let students: any[] = [];
+    let students: Student[] = [];
 
     if (contentType.includes("application/json")) {
       const data = await req.json();
@@ -30,37 +49,23 @@ export async function POST(req: Request) {
       const workbook = XLSX.read(buffer, { type: "buffer" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet);
+      const rows = XLSX.utils.sheet_to_json<ParsedRow>(sheet);
 
-      interface ParsedRow {
-  	Name: string;
-  	Grade: number;
-  	Events: string;
-  	Placements?: string;
-  	Years?: number;
-
-      const students: Student[] = rows.map((row) => {
-        return {
-    	name: row["Name"] ?? "",
-    	grade: parseInt(row["Grade"]?.toString() ?? "0"),
-    	events: row["Events"] ? row["Events"].toString().split(",").map(e => e.trim()) : [],
-    	placements: parsePlacements(row["Placements"]?.toString()),
-    	years: parseInt(row["Years"]?.toString() ?? row["Experience"]?.toString() ?? "0"),
- 	 };
-		});
-
-
-      students = rows.map((row: ParsedRow) => ({
-        name: row["Name"] || "",
-        grade: parseInt(row["Grade"] || 0),
-        events: row["Events"]
-          ? row["Events"].toString().split(",").map((e: string) => e.trim())
+      // Map rows to Student[]
+      students = rows.map((row) => ({
+        name: row.Name ?? "",
+        grade: parseInt(row.Grade?.toString() ?? "0"),
+        events: row.Events
+          ? row.Events.toString().split(",").map((e) => e.trim())
           : [],
-        placements: parsePlacements(row["Placements"]?.toString()),
-        years: parseInt(row["Years"] || row["Experience"] || 0),
+        placements: parsePlacements(row.Placements),
+        years: parseInt(row.Years?.toString() ?? row.Experience?.toString() ?? "0"),
       }));
     } else {
-      return NextResponse.json({ error: "Unsupported Content-Type", students: [] }, { status: 400 });
+      return NextResponse.json(
+        { error: "Unsupported Content-Type", students: [] },
+        { status: 400 }
+      );
     }
 
     return NextResponse.json({ students });
