@@ -43,7 +43,7 @@ export default function RosterTable({ roster, setRoster }: RosterTableProps) {
   }
 
   const handleSlotChange = (eventName: string, slotIndex: number, value: string) => {
-    setRoster((prev) => {
+    setRoster((prev: Record<string, string[]>) => {
       const updated = { ...prev };
       updated[eventName][slotIndex] = value;
       return updated;
